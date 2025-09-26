@@ -1,0 +1,172 @@
+\documentclass[a4paper, 12pt]{report}
+
+\usepackage[dvipsnames]{xcolor}
+
+%%%%%%%%%%%%%%%%
+% Set Variables %
+%%%%%%%%%%%%%%%%
+
+\def\useItalian{0}  % 1 = Italian, 0 = English
+
+\def\courseName{Cryptography}
+
+\def\coursePrerequisites{TODO}
+
+% \def\book{"My book",\\Author 1, ...}
+
+% \def\authorName{Simone Bianco}
+% \def\email{bianco.simone@outlook.it}
+% \def\github{https://github.com/Exyss/university-notes}
+% \def\linkedin{https://www.linkedin.com/in/simone-bianco}
+
+\def\authorName{Alessio Bandiera}
+\def\email{alessio.bandiera02@gmail.com}
+\def\github{https://github.com/aflaag-notes}
+\def\linkedin{https://www.linkedin.com/in/alessio-bandiera-a53767223}
+
+% Do not change
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+
+\usepackage{../../packages/Nyx/nyx-packages}
+\usepackage{../../packages/Nyx/nyx-styles}
+\usepackage{../../packages/Nyx/nyx-frames}
+\usepackage{../../packages/Nyx/nyx-macros}
+\usepackage{../../packages/Nyx/nyx-title}
+\usepackage{../../packages/Nyx/nyx-intro}
+
+%%%%%%%%%%%%%%
+% Title-page %
+%%%%%%%%%%%%%%
+
+\logo{../../packages/Nyx/logo.png}
+
+\if\useItalian1
+    \institute{\curlyquotes{\hspace{0.25mm}Sapienza} Università di Roma}
+    \faculty{Ingegneria dell'Informazione,\\Informatica e Statistica}
+    \department{Dipartimento di Informatica}
+    \ifdefined\book
+        \subtitle{Appunti integrati con il libro \book}
+    \fi
+    \author{\textit{Autore}\\\authorName}
+\else
+    \institute{\curlyquotes{\hspace{0.25mm}Sapienza} University of Rome}
+    \faculty{Faculty of Information Engineering,\\Informatics and Statistics}
+    \department{Department of Computer Science}
+    \ifdefined\book
+        \subtitle{Lecture notes integrated with the book \book}
+    \fi
+    \author{\textit{Author}\\\authorName}
+\fi
+
+\title{\courseName}
+\date{\today}
+
+% \supervisor{Linus \textsc{Torvalds}}
+% \context{Well, I was bored\ldots}
+
+\addbibresource{./references.bib}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+
+% The following style changes are valid only inside this scope 
+{
+	\hypersetup{allcolors=black}
+	\fancypagestyle{plain}{%
+		\fancyhead{}        % clear all header fields
+		\fancyfoot{}        % clear all header fields
+		\fancyfoot[C]{\thepage}
+		\renewcommand{\headrulewidth}{0pt}
+		\renewcommand{\footrulewidth}{0pt}}
+
+	\romantableofcontents
+}
+
+\introduction
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{TODO}
+
+\section{TODO}
+
+TODO \todo{missing introduction}
+
+\begin{frameddefn}{Perfect secrecy}
+	Given any distribution $M$ over $\mathcal M$, and $k$ chosen UAR on $\mathcal K$, we say that $\Pi = (\mathrm{Enc}, \mathrm{Dec})$ is \tbf{perfectly secret} if $$\forall m \in \mathcal M, c \in \mathcal C \quad \Pr[M = m] = \Pr[M = m \mid C = c]$$
+\end{frameddefn}
+
+TODO \todo{de sta definizione non me torna la distribuzione} In other words, this definition requires the encrypted text $c$ to \tit{not reveal} anything about the plaintext $m$. The following lemma shows some properties about perfect secrecy.
+
+\begin{framedlem}{}
+	The following three conditions are equivalent:
+
+	\begin{enumerate}
+		\item perfect secrecy
+		\item independence of $M$ and $C$
+		\item $\forall m, m' \in \mathcal M, c \in C \quad \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c] = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m') = c]$
+	\end{enumerate}
+\end{framedlem}
+
+\begin{proof}
+	We will prove the statements cyclically.
+
+	\begin{itemize}
+		\item $1 \implies 2$. By perfect secrecy, we have that $$\Pr[M = m] = \Pr[M = m \mid C = c] = \dfrac{\Pr[M = m \land C = c]}{\Pr[C = c]}$$ therefore, by rearranging the terms we get that $$\Pr[M = m \land C = c] = \Pr[M = m] \cdot \Pr[C = c]$$
+		\item $2 \implies 3$. Fix $m \in \mathcal M$ and $c \in \mathcal C$; we have that
+
+		      \begin{equation*}
+			      \begin{alignedat}{2}
+				      \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c] & = \Pr_{k \in \mathcal K}[\mathrm{enc}(K, M) \mid M = m] &                                                     \\
+				                                                     & = \Pr_{k \in \mathcal K}[C = c \mid M = m]              & \quad \quad (\mbox{by definition})                  \\
+				                                                     & = \Pr[C = c]                                            & \quad \quad (\mbox{by independence of $M$ and $C$})
+			      \end{alignedat}
+		      \end{equation*}
+
+		      Now fix another message $m' \in \mathcal M$; we can repeat the same steps and obtain that $\Pr_{k \in \mathcal K}[\mathrm{enc}(k, m') = c] = \Pr[C = c]$ which concludes the proof.
+		\item $3 \implies 1$. Fix $c \in \mathcal C$.
+
+		      \claim{
+			      $\Pr[C = c] = \Pr[C = c \mid M = m]$
+		      }{
+			      By assuming property 3, we get that
+
+			      \begin{equation*}
+				      \begin{alignedat}{2}
+					      \Pr[C = c] & = \sum_{m' \in \mathcal M}{\Pr[C = c \mid M = m'] \cdot \Pr[M = m']}                                     & \quad (\mbox{by the L.T.P.}) \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{enc}(k, M) = c \mid M = m'] \cdot \Pr[M = m']} &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{end}(k, m') = c] \cdot \Pr[M = m']}            &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{end}(k, m) = c] \cdot \Pr[M = m']}             & \quad (\mbox{by property 3}) \\
+					                 & = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c] \cdot \sum_{m' \in \mathcal M}{\Pr[m = m']}             &                              \\
+					                 & = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c]                                                         &                              \\
+					                 & = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, M) = c \mid M = m]                                              &                              \\
+					                 & = \Pr_{k \in \mathcal K}[C = c \mid M = m]                                                               &                              \\
+				      \end{alignedat}
+			      \end{equation*}
+		      }
+
+		      Finally, by Bayes' theorem we have that
+
+		      \begin{equation*}
+			      \begin{alignedat}{2}
+				      \Pr[M = m] & = \dfrac{\Pr[M = m \mid C = c] \cdot \Pr[C = c]}{\Pr[C = c \mid M = m]} &                             \\
+				                 & = \Pr[M = m \mid C = c]                                                 & \quad (\mbox{by the claim}) \\
+			      \end{alignedat}
+		      \end{equation*}
+
+		      which is precisely perfect secrecy.
+	\end{itemize}
+\end{proof}
+
+TODO \todo{buco OTP}
+
+% \printbibliography % UNCOMMENT FOR BIBLIOGRAPHY
+
+\end{document}
