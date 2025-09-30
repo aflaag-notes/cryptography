@@ -111,7 +111,7 @@ TODO \todo{de sta definizione non me torna la distribuzione} In other words, thi
 	\begin{enumerate}
 		\item perfect secrecy
 		\item independence of $M$ and $C$
-		\item $\forall m, m' \in \mathcal M, c \in C \quad \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c] = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m') = c]$
+		\item $\forall m, m' \in \mathcal M, c \in C \quad \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m') = c]$
 	\end{enumerate}
 \end{framedlem}
 
@@ -124,13 +124,13 @@ TODO \todo{de sta definizione non me torna la distribuzione} In other words, thi
 
 		      \begin{equation*}
 			      \begin{alignedat}{2}
-				      \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c] & = \Pr_{k \in \mathcal K}[\mathrm{enc}(K, M) \mid M = m] &                                                     \\
+				      \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(K, M) \mid M = m] &                                                     \\
 				                                                     & = \Pr_{k \in \mathcal K}[C = c \mid M = m]              & \quad \quad (\mbox{by definition})                  \\
 				                                                     & = \Pr[C = c]                                            & \quad \quad (\mbox{by independence of $M$ and $C$})
 			      \end{alignedat}
 		      \end{equation*}
 
-		      Now fix another message $m' \in \mathcal M$; we can repeat the same steps and obtain that $\Pr_{k \in \mathcal K}[\mathrm{enc}(k, m') = c] = \Pr[C = c]$ which concludes the proof.
+		      Now fix another message $m' \in \mathcal M$; we can repeat the same steps and obtain that $\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m') = c] = \Pr[C = c]$ which concludes the proof.
 		\item $3 \implies 1$. Fix $c \in \mathcal C$.
 
 		      \claim{
@@ -141,12 +141,12 @@ TODO \todo{de sta definizione non me torna la distribuzione} In other words, thi
 			      \begin{equation*}
 				      \begin{alignedat}{2}
 					      \Pr[C = c] & = \sum_{m' \in \mathcal M}{\Pr[C = c \mid M = m'] \cdot \Pr[M = m']}                                     & \quad (\mbox{by the L.T.P.}) \\
-					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{enc}(k, M) = c \mid M = m'] \cdot \Pr[M = m']} &                              \\
-					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{end}(k, m') = c] \cdot \Pr[M = m']}            &                              \\
-					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{end}(k, m) = c] \cdot \Pr[M = m']}             & \quad (\mbox{by property 3}) \\
-					                 & = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c] \cdot \sum_{m' \in \mathcal M}{\Pr[m = m']}             &                              \\
-					                 & = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, m) = c]                                                         &                              \\
-					                 & = \Pr_{k \in \mathcal K}[\mathrm{enc}(k, M) = c \mid M = m]                                              &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, M) = c \mid M = m'] \cdot \Pr[M = m']} &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m') = c] \cdot \Pr[M = m']}            &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] \cdot \Pr[M = m']}             & \quad (\mbox{by property 3}) \\
+					                 & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] \cdot \sum_{m' \in \mathcal M}{\Pr[m = m']}             &                              \\
+					                 & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c]                                                         &                              \\
+					                 & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, M) = c \mid M = m]                                              &                              \\
 					                 & = \Pr_{k \in \mathcal K}[C = c \mid M = m]                                                               &                              \\
 				      \end{alignedat}
 			      \end{equation*}
