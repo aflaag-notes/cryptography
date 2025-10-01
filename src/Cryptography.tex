@@ -165,7 +165,84 @@ TODO \todo{de sta definizione non me torna la distribuzione} In other words, thi
 	\end{itemize}
 \end{proof}
 
-TODO \todo{buco OTP}
+Thanks to this lemma, we can prove the following result through the third alternative definition of perfect secrecy.
+
+\begin{frameddthm}{}
+    OTP has perfect secrecy.
+\end{framedthm}
+
+\begin{proof}
+    % Fix two messages $m, m' \in \mathcal M$, and a cyphertext $c \in \mathcal C$; by the definition of the OTP system and the properties of the XOR function, we have that $$\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] = \Pr_{K \in_R \mathcal K}[K \oplus m = c]$$
+    TODO \todo{prima fai OTP magari}
+\end{proof}
+
+TODO \todo{buco}
+
+We will now focus on the second goal of cryptography: \tit{message integrity}, which is usually achieved through \tbf{Message Authentication Codes (MACs)}, which allows the receiver to determine if the message has been tempered with.
+
+First, let's start with a simple model, that ignores secrecy and only cares about message integrity. This type of MACs use a deterministic \tbf{tagging function}, usually implemented though \tit{hash functions}, but in general it is a function of the form $$\func{\mbox{Tag}}{\mathcal K \times \mathcal M}{\mathcal T}$$, whetre $\mathcal T$ is the tag space, i.e. the set of all tag strings.
+
+TODO \todo{disegno + paragrafo}
+
+\begin{frameddefn}{$t$-time $\varepsilon$-statistical security}
+    A MAC $\Pi = (\mbox{Tag})$ is said to have \tbf{$t$-time $\varepsilon$-statistical security} if $\forall m, m_1, \ldots, m_t \in \mathcal M$ pairwise distinct, and $\forall \tau, \tau_1, \ldots, \tau_t \in \mathcal T$ it holds that $$\Pr_{K \in_R \mathcal K}[\mbox{Tag}(K, m) = \tau \mid \mbox{Tag}(K, m_1) = \tau_1, \ldots, \mbox{Tag}(K, m_t) = \tau_t] \le \varepsilon$$
+\end{frameddefn}
+ 
+In other words, this property states that even when $t$ message-tag pairs $(m_1, \tau_1), \ldots, (m_t, \tau_t)$ obtained through the same key $K$ are known, the probability of any message-tag pair $(m, \tau)$ being obtained through the same key $K$ is at most $\varepsilon$. Clearly, we would like $\varepsilon$ to be as small as possible, and $t$ to be as large as possible. However it is easy to see that $\forall t \in \N$ it is impossible to get $\varepsilon = 0$, since any random $\tau \in \mathcal T$ has always a $\tfrac{1}{\abs {\mathcal T}}$ probability of being correct by random chance.
+
+Furthermore, as we proved for perfect secrecy, we are going to show that the notion of \curlyquotes{good} statistical security is achievable, even though it's highly inefficient in terms of key size.
+
+\begin{framedthm}{}
+    Any $t$-time $2^{-\lambda}$-statistically secure MAC must have a key of size $(t + 1) \cdot \lambda$
+\end{framedthm}
+
+A good enough 1-time statisticalllhy secure MAC can be achieved through \tbf{pairwise independent hash functions}, a family of hash functions where each pair of functions forms a pari of independent random variables.
+
+\begin{frameddefn}{Pairwise independency}
+    Let $\mathcal H = \{h_K : \mathcal K \to \mathcal T\}_{K \in_R \mathcal K}$ be a family of hash functions; we say that $\mathcal H$ is \tbf{pairwise independent} if $\forall m, m' \in \mathcal M$ such that $m \neq m'$ it holds that the distribution $(h_K(m), h_K(m'))$ is uniform over $\mathcal T \times \mathcal T$ when $K \in_R \mathcal K$
+\end{frameddefn}
+
+Note that, in this definition, $h_K(m)$ and $h_K(m')$ are two random variables \todo{what the f does this def mean}.
+
+\begin{framedthm}{}
+    Any $\mathcal H = \{h_K : \mathcal M \to \mathcal T\}_{K \in_R \mathcal K}$ family of pairwise independent hash functions induces a 1-time $\tfrac{1}{\abs {\mathcal T}}$-statistically secure MAC.
+\end{framedthm}
+
+\begin{proof}
+    TODO \todo{todo}
+\end{proof}
+
+TODO \todo{buco}
+
+\subsection{Randomness extraction}
+
+TODO \todo{buco}
+
+Let's first address the problem of \tit{extracting} randomness from an unpredictable secure source (i.e. random variable) $X$. The first \tbf{extractor} has been introduced by Von Neumann, which yields a fair random coin from an unpredictable unfair one. Let $B \in \{0, 1\}$ be the random variable describing the unpredictable unfrair coin, such that for instance $\Pr[B = 0] = p < \tfrac{1}{2}$. Let $Y \in \{0, 1\}$ be the random variable describing the coin we want to extract; its vaule will be determined by the following procedure:
+
+\begin{itemize}
+    \item sample two values $b_1, b_2$ from $B$ independently
+    \item if $b_1 = b_2$, $Y$ is assigned no value --- noted with $Y = ?$ and the process is repeated from the beginning
+    \item if $b_1 \neq b_2$, $Y = 1$ if and only if $b_1 = 0$ and $b_2 = 1$
+\end{itemize}
+
+First, we observe that this process can go on indefinitely, never halting on any value for $Y$. But assuming the procedure does halt, we have that $$\Pr[Y = 0] = \Pr[b_1 = 1 \land b_2 = 0] = \Pr[b_1 = 1] \cdot \Pr[b_2 = 0] = (1 - p)p$$ $$\Pr[Y = 1] = \Pr[b_1 = 0 \land b_2 = 1] = \Pr[b_1 = 0] \cdot \Pr[b_2 = 1] = p(1 - p)$$ Moreover, we see that the probability of $Y = ?$ happening for $m$ consecutive tries is at most $$\Pr[Y = ? \mbox{for $m$ tries}] = (\Pr[Y = ?])^m = (1 - \Pr[Y = 0 \lor Y = 1])^m \le (1 - 2p(1 - p))^m$$ and as $m$ goes to infinity, the latter probabijlity goes to 0, which implies that $\Pr[Y = 0]$ and $\Pr[Y = 1]$ will tend towards $\tfrac{1}{2}$ due to them having the same probability and them being the only two possible outcomes. Thus, we have achieved a fair coin $Y$.
+
+TODO \todo{par}
+
+\begin{frameddefn}{Min-entropy}
+    Given a random variable $X$, the \tbf{min-entropy} of $X$ is defined as follows: $$H_\mbox{min}(X) := - \log \max_x{\Pr[X = x]}$$
+\end{frameddefn}
+
+TODO \todo{todo}
+
+\begin{framedprop}{}
+    Let $X$ be a random variable defined over $\{0, 1\}^n$; there is no extractor Ext such that $\mbox{Ext}(X) \in \{0, 1\}$.
+\end{framedprop}
+
+\begin{proof}
+    Let $\func{\mbox{Ext}}{\{0, 1\}^n}{\{0, 1\}}$ be any extractor, and let $b \in \{0, 1\}$ be the output minimizing the cardinality of the preimage of the extractor, i.e. the set of inputs for which the extractor output $b$ $$b = \argmin_{b' \in \{0, 1\}}{\abs{\mbox{Ext}^{-1}(b)}}$$ By the pigeonhole principle, we have that $$\abs{\mbox{Ext}^{-1}(b)} \le \dfrac{\abs{\{0, 1\}^n}}{2} = \dfrac{2^n}{2} = 2^{n - 1}$$ Let $X$ be a random variable uniform over $\mbox{Ext}^{-1}(b)$ \todo{da finire}
+\end{proof}
 
 % \printbibliography % UNCOMMENT FOR BIBLIOGRAPHY
 
