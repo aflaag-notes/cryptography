@@ -99,19 +99,45 @@
 
 TODO \todo{missing introduction}
 
-\begin{frameddefn}{Perfect secrecy}
-	Given any distribution $M$ over $\mathcal M$, and $k$ chosen UAR on $\mathcal K$, we say that $\Pi = (\mathrm{Enc}, \mathrm{Dec})$ is \tbf{perfectly secret} if $$\forall m \in \mathcal M, c \in \mathcal C \quad \Pr[M = m] = \Pr[M = m \mid C = c]$$
+In this section, we will discuss \tbf{symmetric cryptography}, i.e. cryptosystems where a shared secret key is used for both encryption and decryption. Such encryption method is fast and efficient, but generally considered less secure. The core model of this approach is the \tbf{Secret Key Encryption (SKE)}, composed of:
+
+\begin{itemize}
+	\item a shared \tit{secret} key $K \in_R \mathcal K$ chosen uniformly at random
+	\item an \tit{encryption function} $\mbox{Enc} : \mathcal K \times \mathcal M \to \mathcal C$ that transforms plaintext into cyphertext --- where $\mathcal K$ and $\mathcal C$ are the spaces of the keys and the cyphertexts, respectively
+	\item a \tit{decryption function} $\mbox{Dec}: \mathcal K \times \mathcal C \to \mathcal M$ that transforms a cyphertext into a plaintext
+\end{itemize}
+
+Clearly, to be useful at all SKEs must be \tbf{correct}, which means that if a message $m \in \mathcal M$ is encrypted through $K \in_R \mathcal K$ getting $c \in \mathcal C$, the decription process on $c$ through $K$ must produce the original message $m$
+
+\begin{frameddefn}{Correctness of SKEs}
+	An SKE $\Pi = (\mbox{Enc}, \mbox{Dec})$ is said to be \tbf{correct} if it holds that $$\forall m \in \mathcal M, K \in_R \mathcal K \quad \mbox{Dec}(\mbox{Enc}(K, m)) = m$$
 \end{frameddefn}
 
-TODO \todo{de sta definizione non me torna la distribuzione} In other words, this definition requires the encrypted text $c$ to \tit{not reveal} anything about the plaintext $m$. The following lemma shows some properties about perfect secrecy.
+TODO \todo{diagram}
+
+During the 19th century, the Dutch cryptographer Kerckhoff postulated his homonym principle, which is stated below.
+
+\begin{framedprinc}{Kerckhoff's principle}
+	The security of a cryptographic system should depend solely on the secrecy of the key.
+\end{framedprinc}
+
+In other words, a system should be secure \tit{even if everything is public but the key}. During his work, Shannon proposed a formal definition of \tbf{perfect secrecy} which fully follows the concept of Kerckhoff's principle.
+
+\begin{frameddefn}{Perfect secrecy}
+	Given an SKE $\Pi = (\mbox{Enc}, \mbox{Dec})$, a random variable $M$ over $\mathcal M$ and a random variable $C = \mbox{Enc}(K, M)$ for some $K \in_R \mathcal K$, we say that $\Pi$ has \tbf{perfect secrecy} if $$\forall m \in \mathcal M, c \in \mathcal C \quad \Pr[M = m] = \Pr[M = m \mid C = c]$$
+\end{frameddefn}
+
+In other words, as Shannon originally formulated it, this definition states that the probability of $m$ being exactly the communicated message must not depend on the cyphertext $c$, which implies that $c$ can be known by everyone. Hence, this definition requires the encrypted text $c$ to \tit{not reveal} anything about the plaintext $m$. The following lemma shows some properties about perfect secrecy.
+
+Shannon provde that perfect secrecy is achievable by some cryptosystems, but with some limitations. For instance, consider the \tbf{One Time Pad (OTP)} SKE, in which we assume that $\mathcal M = \mathcal K = \mathcal C = \{0, 1\}^n$ for some fixed length $n \in \N$, and the encryption and decryption functions are defined as follows: $$\mbox{Enc}(K, m) = K \oplus m \quad \quad \mbox{Dec}(K, c) = K \oplus c$$ (which is always possible by invertibility of the XOR function). We will prove that OTP has perfect secrecy by first providing an alternative definition to the latter.
 
 \begin{framedlem}{}
-	The following three conditions are equivalent:
+	Let $\Pi = (\mbox{Enc}, \mbox{Dec})$ be an SKE, $M$ be a random variable over $\mathcal M$ and $C$ be a random variable defined as $C = \mbox{Enc}(K, M)$ for some $K \in_R \mathcal K$. The following three conditions are equivalent:
 
 	\begin{enumerate}
-		\item perfect secrecy
-		\item independence of $M$ and $C$
-		\item $\forall m, m' \in \mathcal M, c \in C \quad \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m') = c]$
+		\item $\Pi$ has perfect secrecy
+		\item $M$ and $C$ are independent
+		\item $\forall m, m' \in \mathcal M, c \in C \quad \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] = \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m') = c]$
 	\end{enumerate}
 \end{framedlem}
 
@@ -119,35 +145,32 @@ TODO \todo{de sta definizione non me torna la distribuzione} In other words, thi
 	We will prove the statements cyclically.
 
 	\begin{itemize}
-		\item $1 \implies 2$. By perfect secrecy, we have that $$\Pr[M = m] = \Pr[M = m \mid C = c] = \dfrac{\Pr[M = m \land C = c]}{\Pr[C = c]}$$ therefore, by rearranging the terms we get that $$\Pr[M = m \land C = c] = \Pr[M = m] \cdot \Pr[C = c]$$
+		\item $1 \implies 2$. By perfect secrecy of $\Pi$ we have that $$\Pr[M = m] = \Pr[M = m \mid C = c] = \dfrac{\Pr[M = m \land C = c]}{\Pr[C = c]}$$ therefore, by rearranging the terms we get that $$\Pr[M = m \land C = c] = \Pr[M = m] \cdot \Pr[C = c]$$
 		\item $2 \implies 3$. Fix $m \in \mathcal M$ and $c \in \mathcal C$; we have that
-
 		      \begin{equation*}
 			      \begin{alignedat}{2}
-				      \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(K, M) \mid M = m] &                                                     \\
-				                                                     & = \Pr_{k \in \mathcal K}[C = c \mid M = m]              & \quad \quad (\mbox{by definition})                  \\
-				                                                     & = \Pr[C = c]                                            & \quad \quad (\mbox{by independence of $M$ and $C$})
+				      \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] & = \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, M) \mid M = m] &                                               \\
+				                                                       & = \Pr_{K \in_R \mathcal K}[C = c \mid M = m]              & \quad (\mbox{by definition})                  \\
+				                                                       & = \Pr[C = c]                                              & \quad (\mbox{by independence of $M$ and $C$})
 			      \end{alignedat}
 		      \end{equation*}
-
-		      Now fix another message $m' \in \mathcal M$; we can repeat the same steps and obtain that $\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m') = c] = \Pr[C = c]$ which concludes the proof.
+		      Now fix another message $m' \in \mathcal M$; we can repeat the same steps and obtain that $\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m') = c] = \Pr[C = c]$ which concludes the proof.
 		\item $3 \implies 1$. Fix $c \in \mathcal C$.
 
 		      \claim{
 			      $\Pr[C = c] = \Pr[C = c \mid M = m]$
 		      }{
 			      By assuming property 3, we get that
-
 			      \begin{equation*}
 				      \begin{alignedat}{2}
-					      \Pr[C = c] & = \sum_{m' \in \mathcal M}{\Pr[C = c \mid M = m'] \cdot \Pr[M = m']}                                     & \quad (\mbox{by the L.T.P.}) \\
-					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, M) = c \mid M = m'] \cdot \Pr[M = m']} &                              \\
-					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m') = c] \cdot \Pr[M = m']}            &                              \\
-					                 & = \sum_{m' \in \mathcal M}{\Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] \cdot \Pr[M = m']}             & \quad (\mbox{by property 3}) \\
-					                 & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c] \cdot \sum_{m' \in \mathcal M}{\Pr[m = m']}             &                              \\
-					                 & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, m) = c]                                                         &                              \\
-					                 & = \Pr_{k \in \mathcal K}[\mathrm{Enc}(k, M) = c \mid M = m]                                              &                              \\
-					                 & = \Pr_{k \in \mathcal K}[C = c \mid M = m]                                                               &                              \\
+					      \Pr[C = c] & = \sum_{m' \in \mathcal M}{\Pr[C = c \mid M = m'] \cdot \Pr[M = m']}                                       & \quad (\mbox{by the L.T.P.}) \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, M) = c \mid M = m'] \cdot \Pr[M = m']} &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m') = c] \cdot \Pr[M = m']}            &                              \\
+					                 & = \sum_{m' \in \mathcal M}{\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] \cdot \Pr[M = m']}             & \quad (\mbox{by property 3}) \\
+					                 & = \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] \cdot \sum_{m' \in \mathcal M}{\Pr[m = m']}             &                              \\
+					                 & = \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c]                                                         &                              \\
+					                 & = \Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, M) = c \mid M = m]                                              &                              \\
+					                 & = \Pr_{K \in_R \mathcal K}[C = c \mid M = m]                                                               &                              \\
 				      \end{alignedat}
 			      \end{equation*}
 		      }
@@ -167,13 +190,12 @@ TODO \todo{de sta definizione non me torna la distribuzione} In other words, thi
 
 Thanks to this lemma, we can prove the following result through the third alternative definition of perfect secrecy.
 
-\begin{frameddthm}{}
-    OTP has perfect secrecy.
+\begin{framedthm}{}
+	OTP has perfect secrecy.
 \end{framedthm}
 
 \begin{proof}
-    % Fix two messages $m, m' \in \mathcal M$, and a cyphertext $c \in \mathcal C$; by the definition of the OTP system and the properties of the XOR function, we have that $$\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] = \Pr_{K \in_R \mathcal K}[K \oplus m = c]$$
-    TODO \todo{prima fai OTP magari}
+	Fix two messages $m, m' \in \mathcal M$, and a cyphertext $c \in \mathcal C$; by the definition of the OTP system and the properties of the XOR function, we have that $$\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] = \Pr_{K \in_R \mathcal K}[K \oplus m = c] = \Pr_{K \in_R \mathcal K}[K = m \oplus c] = 2^{-n}$$ and through the same reasoning we can analogously show that $\Pr_{K \in_R \mathcal K}[\mbox{Enc}(K, m') = c] = 2^{-n}$ which proves that the third condition of the alternative definition of perfect secrecy provided in the previous lemma holds for the OTP SKE.
 \end{proof}
 
 TODO \todo{buco}
@@ -182,34 +204,40 @@ We will now focus on the second goal of cryptography: \tit{message integrity}, w
 
 First, let's start with a simple model, that ignores secrecy and only cares about message integrity. This type of MACs use a deterministic \tbf{tagging function}, usually implemented though \tit{hash functions}, but in general it is a function of the form $$\func{\mbox{Tag}}{\mathcal K \times \mathcal M}{\mathcal T}$$, whetre $\mathcal T$ is the tag space, i.e. the set of all tag strings.
 
-TODO \todo{disegno + paragrafo}
+TODO \todo{paragrafo}
+
+\section{Message Authentication Codes (MACs)}
+
+TODO \todo{paragrafo}
+
+TODO \todo{disegno}
 
 \begin{frameddefn}{$t$-time $\varepsilon$-statistical security}
-    A MAC $\Pi = (\mbox{Tag})$ is said to have \tbf{$t$-time $\varepsilon$-statistical security} if $\forall m, m_1, \ldots, m_t \in \mathcal M$ pairwise distinct, and $\forall \tau, \tau_1, \ldots, \tau_t \in \mathcal T$ it holds that $$\Pr_{K \in_R \mathcal K}[\mbox{Tag}(K, m) = \tau \mid \mbox{Tag}(K, m_1) = \tau_1, \ldots, \mbox{Tag}(K, m_t) = \tau_t] \le \varepsilon$$
+	A MAC $\Pi = (\mbox{Tag})$ is said to have \tbf{$t$-time $\varepsilon$-statistical security} if $\forall m, m_1, \ldots, m_t \in \mathcal M$ pairwise distinct, and $\forall \tau, \tau_1, \ldots, \tau_t \in \mathcal T$ it holds that $$\Pr_{K \in_R \mathcal K}[\mbox{Tag}(K, m) = \tau \mid \mbox{Tag}(K, m_1) = \tau_1, \ldots, \mbox{Tag}(K, m_t) = \tau_t] \le \varepsilon$$
 \end{frameddefn}
- 
+
 In other words, this property states that even when $t$ message-tag pairs $(m_1, \tau_1), \ldots, (m_t, \tau_t)$ obtained through the same key $K$ are known, the probability of any message-tag pair $(m, \tau)$ being obtained through the same key $K$ is at most $\varepsilon$. Clearly, we would like $\varepsilon$ to be as small as possible, and $t$ to be as large as possible. However it is easy to see that $\forall t \in \N$ it is impossible to get $\varepsilon = 0$, since any random $\tau \in \mathcal T$ has always a $\tfrac{1}{\abs {\mathcal T}}$ probability of being correct by random chance.
 
 Furthermore, as we proved for perfect secrecy, we are going to show that the notion of \curlyquotes{good} statistical security is achievable, even though it's highly inefficient in terms of key size.
 
 \begin{framedthm}{}
-    Any $t$-time $2^{-\lambda}$-statistically secure MAC must have a key of size $(t + 1) \cdot \lambda$
+	Any $t$-time $2^{-\lambda}$-statistically secure MAC must have a key of size $(t + 1) \cdot \lambda$
 \end{framedthm}
 
 A good enough 1-time statisticalllhy secure MAC can be achieved through \tbf{pairwise independent hash functions}, a family of hash functions where each pair of functions forms a pari of independent random variables.
 
 \begin{frameddefn}{Pairwise independency}
-    Let $\mathcal H = \{h_K : \mathcal K \to \mathcal T\}_{K \in_R \mathcal K}$ be a family of hash functions; we say that $\mathcal H$ is \tbf{pairwise independent} if $\forall m, m' \in \mathcal M$ such that $m \neq m'$ it holds that the distribution $(h_K(m), h_K(m'))$ is uniform over $\mathcal T \times \mathcal T$ when $K \in_R \mathcal K$
+	Let $\mathcal H = \{h_K : \mathcal K \to \mathcal T\}_{K \in_R \mathcal K}$ be a family of hash functions; we say that $\mathcal H$ is \tbf{pairwise independent} if $\forall m, m' \in \mathcal M$ such that $m \neq m'$ it holds that the distribution $(h_K(m), h_K(m'))$ is uniform over $\mathcal T \times \mathcal T$ when $K \in_R \mathcal K$
 \end{frameddefn}
 
 Note that, in this definition, $h_K(m)$ and $h_K(m')$ are two random variables \todo{what the f does this def mean}.
 
 \begin{framedthm}{}
-    Any $\mathcal H = \{h_K : \mathcal M \to \mathcal T\}_{K \in_R \mathcal K}$ family of pairwise independent hash functions induces a 1-time $\tfrac{1}{\abs {\mathcal T}}$-statistically secure MAC.
+	Any $\mathcal H = \{h_K : \mathcal M \to \mathcal T\}_{K \in_R \mathcal K}$ family of pairwise independent hash functions induces a 1-time $\tfrac{1}{\abs {\mathcal T}}$-statistically secure MAC.
 \end{framedthm}
 
 \begin{proof}
-    TODO \todo{todo}
+	TODO \todo{todo}
 \end{proof}
 
 TODO \todo{buco}
@@ -221,9 +249,9 @@ TODO \todo{buco}
 Let's first address the problem of \tit{extracting} randomness from an unpredictable secure source (i.e. random variable) $X$. The first \tbf{extractor} has been introduced by Von Neumann, which yields a fair random coin from an unpredictable unfair one. Let $B \in \{0, 1\}$ be the random variable describing the unpredictable unfrair coin, such that for instance $\Pr[B = 0] = p < \tfrac{1}{2}$. Let $Y \in \{0, 1\}$ be the random variable describing the coin we want to extract; its vaule will be determined by the following procedure:
 
 \begin{itemize}
-    \item sample two values $b_1, b_2$ from $B$ independently
-    \item if $b_1 = b_2$, $Y$ is assigned no value --- noted with $Y = ?$ and the process is repeated from the beginning
-    \item if $b_1 \neq b_2$, $Y = 1$ if and only if $b_1 = 0$ and $b_2 = 1$
+	\item sample two values $b_1, b_2$ from $B$ independently
+	\item if $b_1 = b_2$, $Y$ is assigned no value --- noted with $Y = ?$ and the process is repeated from the beginning
+	\item if $b_1 \neq b_2$, $Y = 1$ if and only if $b_1 = 0$ and $b_2 = 1$
 \end{itemize}
 
 First, we observe that this process can go on indefinitely, never halting on any value for $Y$. But assuming the procedure does halt, we have that $$\Pr[Y = 0] = \Pr[b_1 = 1 \land b_2 = 0] = \Pr[b_1 = 1] \cdot \Pr[b_2 = 0] = (1 - p)p$$ $$\Pr[Y = 1] = \Pr[b_1 = 0 \land b_2 = 1] = \Pr[b_1 = 0] \cdot \Pr[b_2 = 1] = p(1 - p)$$ Moreover, we see that the probability of $Y = ?$ happening for $m$ consecutive tries is at most $$\Pr[Y = ? \mbox{for $m$ tries}] = (\Pr[Y = ?])^m = (1 - \Pr[Y = 0 \lor Y = 1])^m \le (1 - 2p(1 - p))^m$$ and as $m$ goes to infinity, the latter probabijlity goes to 0, which implies that $\Pr[Y = 0]$ and $\Pr[Y = 1]$ will tend towards $\tfrac{1}{2}$ due to them having the same probability and them being the only two possible outcomes. Thus, we have achieved a fair coin $Y$.
@@ -231,18 +259,44 @@ First, we observe that this process can go on indefinitely, never halting on any
 TODO \todo{par}
 
 \begin{frameddefn}{Min-entropy}
-    Given a random variable $X$, the \tbf{min-entropy} of $X$ is defined as follows: $$H_\mbox{min}(X) := - \log \max_x{\Pr[X = x]}$$
+	Given a random variable $X$, the \tbf{min-entropy} of $X$ is defined as follows: $$H_{\mathrm{min}}(X) := - \log{\max_x{\Pr[X = x]}}$$
 \end{frameddefn}
 
 TODO \todo{todo}
 
+Is there an extractor Ext that for any random variable $X$ it outputs a uniform distribution $Y = \mbox{Ext}(X)$ such that $H_\mathrm{min}(X) \ge k$ for some $k > 0$? Even under this constraint, the answer is still negative, in fact it is impossible to define such extractor even if we restrict the question to extracting only \tit{one bit} --- i.e. $\mbox{Ext}(X) = b \in \{0, 1\}$ --- and $k = n - 1$.
+
 \begin{framedprop}{}
-    Let $X$ be a random variable defined over $\{0, 1\}^n$; there is no extractor Ext such that $\mbox{Ext}(X) \in \{0, 1\}$.
+	Let $X$ be a uniform random variable defined over $\{0, 1\}^n$; there is no extractor Ext such that $\mbox{Ext}(X) \in \{0, 1\}$ is uniform.
 \end{framedprop}
 
 \begin{proof}
-    Let $\func{\mbox{Ext}}{\{0, 1\}^n}{\{0, 1\}}$ be any extractor, and let $b \in \{0, 1\}$ be the output minimizing the cardinality of the preimage of the extractor, i.e. the set of inputs for which the extractor output $b$ $$b = \argmin_{b' \in \{0, 1\}}{\abs{\mbox{Ext}^{-1}(b)}}$$ By the pigeonhole principle, we have that $$\abs{\mbox{Ext}^{-1}(b)} \le \dfrac{\abs{\{0, 1\}^n}}{2} = \dfrac{2^n}{2} = 2^{n - 1}$$ Let $X$ be a random variable uniform over $\mbox{Ext}^{-1}(b)$ \todo{da finire}
+	Let $\func{\mbox{Ext}}{\{0, 1\}^n}{\{0, 1\}}$ be any extractor, and let $b \in \{0, 1\}$ be the output minimizing the cardinality of the preimage of the extractor, i.e. the set of inputs for which the extractor output $b$ $$b = \argmin_{b' \in \{0, 1\}}{\abs{\mbox{Ext}^{-1}(b)}}$$ By the pigeonhole principle, we have that $$\abs{\mbox{Ext}^{-1}(b)} \le \dfrac{\abs{\{0, 1\}^n}}{2} = \dfrac{2^n}{2} = 2^{n - 1}$$ Let $X$ be a random variable uniform over $\mbox{Ext}^{-1}(b)$; since $X$ is uniform, we have that $H_\mathrm{min}(X) \ge n- 1$, however $\mbox{Ext}(X)$ cannot be uniform since the output is constant (in fact $\mbox{Ext}(X) \equiv b$).
 \end{proof}
+
+% This proves that any extractor Ext for $X$ has always a bad input uniform random variable $X$
+
+TODO \todo{la roba del par prima va capita}
+
+Hence, since we cannot define an extractor that yields a uniform distribution, the best we can achieve is a distribution that is \tit{close enough} to a uniform one. But what does it mean to be \curlyquotes{close enough} mathematically? First, let us provide the definition of \tbf{statistical distance}.
+
+\begin{frameddefn}{Statistical distance}
+	Given two random variables $X$ and $X'$ defined over the same set, the \tbf{statistical distance} between $X$ and $X'$ is defined as follows: $$\mbox{SD}(X; X') = \dfrac{1}{2} \sum_x{\abs{\Pr[X = x] - \Pr[X' = x]}}$$
+\end{frameddefn}
+
+We can now introduce the concept of \tit{closeness} between distributions.
+
+\begin{frameddefn}{$\varepsilon$-closeness}
+	Given two random variables $X$ and $X'$ defined over the same set, we say that $X$ and $X'$ are \tbf{$\varepsilon$-close}, written as $X \sim_\varepsilon X'$, if it holds that $$\mbox{SD}(X; X') \le \varepsilon$$
+\end{frameddefn}
+
+We can describe the concept of $\varepsilon$-closeness between random variables as saying that no \tit{unbounded adversary} $A$ can distinguish whether a value $x$ has been sampled from $X$ or $X'$, or in symbols $$\abs{\Pr[A(x) = 1 : x \leftarrow X] - \Pr[A(x) = 1: x \leftarrow X']} \le \varepsilon$$
+
+\begin{frameddefn}{Deterministic extractor}
+	Given a random variable $S$, called \tit{seed}, we say that $\func{\mbox{Ext}}{\{0, 1\}^d \times \{0, 1\}^n}{\{0, 1\}^\ell}$ is a $(k, \varepsilon)$-extractor if for every variable $X$ such that $H_\mathrm{min}(X) \ge k$ it holds that $$S \sim U_d \implies (S, \mathrm{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$$
+\end{frameddefn}
+
+We observe that the condition $(S, \mathrm{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$ implies that $S$ must be \tit{public} \todo{why?}. This requirement is forced in order to avoid trivial extractors, such as $\mbox{Ext}(S, X) = S$.
 
 % \printbibliography % UNCOMMENT FOR BIBLIOGRAPHY
 
