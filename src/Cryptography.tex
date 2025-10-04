@@ -95,9 +95,9 @@
 
 \chapter{TODO}
 
-\section{TODO}
-
 TODO \todo{missing introduction}
+
+\section{TODO}
 
 In this section, we will discuss \tbf{symmetric cryptography}, i.e. cryptosystems where a shared secret key is used for both encryption and decryption. Such encryption method is fast and efficient, but generally considered less secure. The core model of this approach is the \tbf{Secret Key Encryption (SKE)}, composed of:
 
@@ -129,7 +129,7 @@ In other words, a system should be secure \tit{even if everything is public but 
 
 In other words, as Shannon originally formulated it, this definition states that the probability of $m$ being exactly the communicated message must not depend on the cyphertext $c$, which implies that $c$ can be known by everyone. Hence, this definition requires the encrypted text $c$ to \tit{not reveal} anything about the plaintext $m$. The following lemma shows some properties about perfect secrecy.
 
-Shannon provde that perfect secrecy is achievable by some cryptosystems, but with some limitations. For instance, consider the \tbf{One Time Pad (OTP)} SKE, in which we assume that $\mathcal M = \mathcal K = \mathcal C = \{0, 1\}^n$ for some fixed length $n \in \N$, and the encryption and decryption functions are defined as follows: $$\mbox{Enc}(K, m) = K \oplus m \quad \quad \mbox{Dec}(K, c) = K \oplus c$$ (which is always possible by invertibility of the XOR function). We will prove that OTP has perfect secrecy by first providing an alternative definition to the latter.
+Shannon proved that perfect secrecy is achievable by some cryptosystems, but with some limitations. For instance, consider the \tbf{One Time Pad (OTP)} SKE, in which we assume that $\mathcal M = \mathcal K = \mathcal C = \{0, 1\}^n$ for some fixed length $n \in \N$, and the encryption and decryption functions are defined as follows: $$\mbox{Enc}(K, m) = K \oplus m \quad \quad \mbox{Dec}(K, c) = K \oplus c$$ (which is always possible by invertibility of the XOR function). We will prove that OTP has perfect secrecy by first providing an alternative definition to the latter.
 
 \begin{framedlem}{}
 	Let $\Pi = (\mbox{Enc}, \mbox{Dec})$ be an SKE, $M$ be a random variable over $\mathcal M$ and $C$ be a random variable defined as $C = \mbox{Enc}(K, M)$ for some $K \in_R \mathcal K$. The following three conditions are equivalent:
@@ -198,19 +198,27 @@ Thanks to this lemma, we can prove the following result through the third altern
 	Fix two messages $m, m' \in \mathcal M$, and a cyphertext $c \in \mathcal C$; by the definition of the OTP system and the properties of the XOR function, we have that $$\Pr_{K \in_R \mathcal K}[\mathrm{Enc}(K, m) = c] = \Pr_{K \in_R \mathcal K}[K \oplus m = c] = \Pr_{K \in_R \mathcal K}[K = m \oplus c] = 2^{-n}$$ and through the same reasoning we can analogously show that $\Pr_{K \in_R \mathcal K}[\mbox{Enc}(K, m') = c] = 2^{-n}$ which proves that the third condition of the alternative definition of perfect secrecy provided in the previous lemma holds for the OTP SKE.
 \end{proof}
 
-TODO \todo{buco}
+To conclude this section, we will show \tbf{Shannon's theorem about perfect secrecy}, in whic he proved an inherent limitation of perfect secrecy.
 
-We will now focus on the second goal of cryptography: \tit{message integrity}, which is usually achieved through \tbf{Message Authentication Codes (MACs)}, which allows the receiver to determine if the message has been tempered with.
+\begin{framedthm}{Shannon's perfect secrecy theorem}
+	Let $\Pi = (\mbox{Enc}, \mbox{Dec})$ be a non-trivial perfectly secret SKE; then, it holds that $\abs{\mathcal K} \ge \abs{\mathcal M}$.
+\end{framedthm}
 
-First, let's start with a simple model, that ignores secrecy and only cares about message integrity. This type of MACs use a deterministic \tbf{tagging function}, usually implemented though \tit{hash functions}, but in general it is a function of the form $$\func{\mbox{Tag}}{\mathcal K \times \mathcal M}{\mathcal T}$$, whetre $\mathcal T$ is the tag space, i.e. the set of all tag strings.
+\begin{proof}
+	Fix any cyphertext $c \in \mathcal C$ such that $\Pr[C = c] > 0$ --- since $\Pi$ is non-trivial there will always exist at least once such $c$. Moreover, let $\mathcal M'$ be the set of possible decryptions over $c$ i.e. $$\mathcal M' := \{\mbox{Dec}(K, c) \mid K \in \mathcal K\}$$ We observe that $\mathcal M'$ contains \tit{at most} one decryption per key, i.e. $\abs{\mathcal M'} \le \abs{\mathcal K}$, since some keys may yield the same decryption.
 
-TODO \todo{paragrafo}
+	Now, by way of contradiction, suppose that $\abs{\mathcal K} < \abs{\mathcal M}$, which sirectly implies that $\abs{\mathcal M'} \le \abs{\mathcal K} < \abs{\mathcal M} \implies \abs{\mathcal M'} < \abs{\mathcal M}$, implying that there must be some $m \in \mathcal M - \mathcal M'$. In particular, such message $m$ cannot be the result of the decryption process applied on $c$, which means that $\Pr[M = m \mid C = c] = 0$. However, when no additional information is given every message is uniform, i.e. $\Pr[M = m] = \tfrac{1}{\abs{\mathcal M}}$, which implies that $$\exists m \in \mathcal M \quad \dfrac{1}{\abs{\mathcal M}} \neq \Pr[M = m \mid C = c] = 0$$ contradicting the fact that $\Pi$ had perfect secrecy $\lightning$.
+\end{proof}
 
 \section{Message Authentication Codes (MACs)}
 
-TODO \todo{paragrafo}
+We will now focus on the second goal of cryptography: \tit{message integrity}, which is usually achieved through \tbf{Message Authentication Codes (MACs)}, which allows the receiver to determine if the message has been tempered with.
+
+First, let's start with a simple model, that ignores secrecy and only cares about message integrity. This type of MACs use a deterministic \tbf{tagging function}, usually implemented though \tit{hash functions}, but in general it is a function of the form $$\func{\mbox{Tag}}{\mathcal K \times \mathcal M}{\mathcal T}$$ where $\mathcal T$ is the tag space, i.e. the set of all tag strings.
 
 TODO \todo{disegno}
+
+TODO \todo{paragrafo}
 
 \begin{frameddefn}{$t$-time $\varepsilon$-statistical security}
 	A MAC $\Pi = (\mbox{Tag})$ is said to have \tbf{$t$-time $\varepsilon$-statistical security} if $\forall m, m_1, \ldots, m_t \in \mathcal M$ pairwise distinct, and $\forall \tau, \tau_1, \ldots, \tau_t \in \mathcal T$ it holds that $$\Pr_{K \in_R \mathcal K}[\mbox{Tag}(K, m) = \tau \mid \mbox{Tag}(K, m_1) = \tau_1, \ldots, \mbox{Tag}(K, m_t) = \tau_t] \le \varepsilon$$
@@ -226,8 +234,8 @@ Furthermore, as we proved for perfect secrecy, we are going to show that the not
 
 A good enough 1-time statisticalllhy secure MAC can be achieved through \tbf{pairwise independent hash functions}, a family of hash functions where each pair of functions forms a pari of independent random variables.
 
-\begin{frameddefn}{Pairwise independency}
-	Let $\mathcal H = \{h_K : \mathcal K \to \mathcal T\}_{K \in_R \mathcal K}$ be a family of hash functions; we say that $\mathcal H$ is \tbf{pairwise independent} if $\forall m, m' \in \mathcal M$ such that $m \neq m'$ it holds that the distribution $(h_K(m), h_K(m'))$ is uniform over $\mathcal T \times \mathcal T$ when $K \in_R \mathcal K$
+\begin{frameddefn}{Pairwise independence}
+	Let $\mathcal H = \{h_K : \mathcal K \to \mathcal T\}_{K \in_R \mathcal K}$ be a family of hash functions; we say that $\mathcal H$ is \tbf{pairwise independent} if $\forall m, m' \in \mathcal M$ such that $m \neq m'$ it holds that the distribution $(h_K(m), h_K(m'))$ is uniform over $\mathcal T \times \mathcal T$ when $K \in_R \mathcal K$.
 \end{frameddefn}
 
 Note that, in this definition, $h_K(m)$ and $h_K(m')$ are two random variables \todo{what the f does this def mean}.
@@ -250,11 +258,11 @@ Let's first address the problem of \tit{extracting} randomness from an unpredict
 
 \begin{itemize}
 	\item sample two values $b_1, b_2$ from $B$ independently
-	\item if $b_1 = b_2$, $Y$ is assigned no value --- noted with $Y = ?$ and the process is repeated from the beginning
+	\item if $b_1 = b_2$, $Y$ is assigned no value --- noted with $Y = \ ?$ and the process is repeated from the beginning
 	\item if $b_1 \neq b_2$, $Y = 1$ if and only if $b_1 = 0$ and $b_2 = 1$
 \end{itemize}
 
-First, we observe that this process can go on indefinitely, never halting on any value for $Y$. But assuming the procedure does halt, we have that $$\Pr[Y = 0] = \Pr[b_1 = 1 \land b_2 = 0] = \Pr[b_1 = 1] \cdot \Pr[b_2 = 0] = (1 - p)p$$ $$\Pr[Y = 1] = \Pr[b_1 = 0 \land b_2 = 1] = \Pr[b_1 = 0] \cdot \Pr[b_2 = 1] = p(1 - p)$$ Moreover, we see that the probability of $Y = ?$ happening for $m$ consecutive tries is at most $$\Pr[Y = ? \mbox{for $m$ tries}] = (\Pr[Y = ?])^m = (1 - \Pr[Y = 0 \lor Y = 1])^m \le (1 - 2p(1 - p))^m$$ and as $m$ goes to infinity, the latter probabijlity goes to 0, which implies that $\Pr[Y = 0]$ and $\Pr[Y = 1]$ will tend towards $\tfrac{1}{2}$ due to them having the same probability and them being the only two possible outcomes. Thus, we have achieved a fair coin $Y$.
+First, we observe that this process can go on indefinitely, never halting on any value for $Y$. But assuming the procedure does halt, we have that $$\Pr[Y = 0] = \Pr[b_1 = 1 \land b_2 = 0] = \Pr[b_1 = 1] \cdot \Pr[b_2 = 0] = (1 - p)p$$ $$\Pr[Y = 1] = \Pr[b_1 = 0 \land b_2 = 1] = \Pr[b_1 = 0] \cdot \Pr[b_2 = 1] = p(1 - p)$$ Moreover, we see that the probability of $Y = \ ?$ happening for $m$ consecutive tries is at most $$\Pr[Y = \ ? \mbox{for $m$ tries}] = (\Pr[Y = \ ?])^m = (1 - \Pr[Y = 0 \lor Y = 1])^m \le (1 - 2p(1 - p))^m$$ and as $m$ goes to infinity, the latter probabijlity goes to 0, which implies that $\Pr[Y = 0]$ and $\Pr[Y = 1]$ will tend towards $\tfrac{1}{2}$ due to them having the same probability and them being the only two possible outcomes. Thus, we have achieved a fair coin $Y$.
 
 TODO \todo{par}
 
@@ -293,10 +301,102 @@ We can now introduce the concept of \tit{closeness} between distributions.
 We can describe the concept of $\varepsilon$-closeness between random variables as saying that no \tit{unbounded adversary} $A$ can distinguish whether a value $x$ has been sampled from $X$ or $X'$, or in symbols $$\abs{\Pr[A(x) = 1 : x \leftarrow X] - \Pr[A(x) = 1: x \leftarrow X']} \le \varepsilon$$
 
 \begin{frameddefn}{Deterministic extractor}
-	Given a random variable $S$, called \tit{seed}, we say that $\func{\mbox{Ext}}{\{0, 1\}^d \times \{0, 1\}^n}{\{0, 1\}^\ell}$ is a $(k, \varepsilon)$-extractor if for every variable $X$ such that $H_\mathrm{min}(X) \ge k$ it holds that $$S \sim U_d \implies (S, \mathrm{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$$
+	Given a random variable $S$, called \tit{seed}, we say that $\func{\mbox{Ext}}{\{0, 1\}^d \times \{0, 1\}^n}{\{0, 1\}^\ell}$ is a \tbf{$(k, \varepsilon)$-extractor} if for every variable $X$ such that $H_\mathrm{min}(X) \ge k$ it holds that $$(S, \mathrm{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$$ when $S \sim U_d$.
 \end{frameddefn}
 
-We observe that the condition $(S, \mathrm{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$ implies that $S$ must be \tit{public} \todo{why?}. This requirement is forced in order to avoid trivial extractors, such as $\mbox{Ext}(S, X) = S$.
+We observe that the condition $(S, \mathrm{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$ implies that $S$ must be \tit{public} \todo{why?}. This requirement is forced in order to avoid trivial extractors, such as $\mbox{Ext}(S, X) = S$. \todo{non ho capito la fine}
+
+The goodness of the hash funcitnos is measured in terms of \tbf{collision probability}, which is defined as follows.
+
+\begin{frameddefn}{Collision probability}
+	Given a random variable $Y$ defined over a domain $\mathcal Y$, the \tbf{collision probability} of $Y$ is defined as follows $$\mbox{Col}(Y) = \sum_{y \in \mathcal Y}{\Pr[Y = y]^2}$$
+\end{frameddefn}
+
+The definition can be explained as follows: the probability collision measures how likely it is that any two possible values of $Y$ \tit{collide}, i.e. given a copy $Y'$ of $Y$ we measure $$\mbox{Col}(Y) = \Pr[Y = Y']$$ and since $Y$ and $Y'$ are i.i.d. (identical and independent distribution) we get that $$\mbox{Col}(Y) = \Pr[Y = Y'] = \sum_{y \in \mathcal Y}{\Pr[Y = y \land Y' = y]} = \sum_{y \in \mathcal Y}{\Pr[y = y]^2}$$
+
+Before proving the leftover hash lemma, consider the following property.
+
+\begin{framedprop}{}
+	Given $Y$ random variable over some domain $\mathcal Y$ such that $\mbox{Col}(Y) \le \tfrac{1}{\abs{\mathcal Y}}(1 + 4 \varepsilon^2)$ for some $\varepsilon \in \R_{>0}$, it holds that $\mbox{SD}(Y;U) \le \varepsilon$ where $U$ is the uniform distribution over $\mathcal Y$.
+\end{framedprop}
+
+\begin{proof}
+	By definition, we have that $$\mbox{SD}(Y;U) = \dfrac{1}{2}\sum_{y \in \mathcal Y}{\abs{\Pr[Y = y]} - \Pr[U = y]} = \dfrac{1}{2} \sum_{y \in \mathcal Y}{\abs{\Pr[Y = y]} - \dfrac{1}{\abs{\mathcal Y}}}$$ Now, for each $y \in \mathcal Y$ let $$q_y := \Pr[Y = y]- \dfrac{1}{\abs{\mathcal Y}} \quad \quad s_y := \soe{ll}{1 & q_y \ge 0 \\ -1 & q_y < 0 }= \mbox{sign}(q_y)$$ and consider the following two vectors $$\overrightarrow{q} = \sbk{q_{y_1} \ \cdots \ q_{y_{\abs{\mathcal Y}}}}$$ $$\overrightarrow{s} = \sbk{s_{y_1} \ \cdots \ s_{y_{\abs{\mathcal Y}}}}$$ Then, we can rewrite the previous equation as follows $$\dfrac{1}{2}\sum_{y \in \mathcal Y}{\abs{\Pr[Y = y] - \dfrac{1}{\abs{\mathcal Y}}}} = \dfrac{1}{2} \sum_{y \in \mathcal Y}{q_y s_y} = \dfrac{1}{2}{\abk{\overrightarrow q, \overrightarrow s}}$$ By the \href{https://en.wikipedia.org/wiki/Cauchy%E2%80%93Schwarz_inequality}{Cauchy-Schwarz inequality} we have that $$\dfrac{1}{2}{\abk{\overrightarrow q, \overrightarrow s}} \le  \dfrac{1}{2} \sqrt{\abk{\overrightarrow q, \overrightarrow q}, \abk{\overrightarrow s, \overrightarrow s}} = \dfrac{1}{2} \sqrt{\rbk{\sum_{y \in \mathcal Y}{q_y^2}} \abs{\mathcal Y}}$$ where $\abk{\overrightarrow s, \overrightarrow s} = \abs{\mathcal Y}$ since every product of $\abk{\overrightarrow s, \overrightarrow s}$ will be either $1 \cdot 1 = 1$ or $-1 \cdot (-1) = 1$, which implies that $\abk{\overrightarrow s, \overrightarrow s} = \sum_{y \in \mathcal{Y}} {1} = \abs{\mathcal Y}$.
+
+	\claim{
+		$\displaystyle \sum_{y \in \mathcal Y}{q_y^2} \le \dfrac{4\varepsilon^2}{\abs{\mathcal Y}}$
+	}{
+		We observe that
+		\begin{equation*}
+			\begin{alignedat}{2}
+				\sum_{y \in \mathcal Y}{q_y^2} & = \sum_{y \in \mathcal Y}{\rbk{\Pr[Y = y] - \dfrac{1}{\abs{\mathcal Y}}}^2}                                                                                       & \\
+				                               & = \sum_{y \in \mathcal Y}{\rbk{\Pr[Y = y]^2 - \dfrac{2}{\abs{\mathcal Y}}\Pr[Y = y] + \dfrac{1}{\abs{\mathcal Y}^2}}}                                             & \\
+				                               & = \sum_{y \in \mathcal Y}{\Pr[Y = y]} - \dfrac{2}{\abs{\mathcal Y}} \sum_{y \in \mathcal Y}{\Pr[Y = y]} + \sum_{y \in \mathcal Y}{\dfrac{1}{\abs{\mathcal Y}^2} } & \\
+				                               & = \sum_{y \in \mathcal Y}{\Pr[Y = y]^2} - \dfrac{2}{\abs{\mathcal Y}} + \dfrac{1}{\abs{\mathcal Y}}                                                               & \\
+				                               & = \mbox{Col}(Y) - \dfrac{1}{\abs{\mathcal Y}}                                                                                                                     & \\
+			\end{alignedat}
+		\end{equation*}
+		Finally, recall that $\mbox{Col}(Y) \le \tfrac{1}{\abs{\mathcal Y}}(1 + 4\varepsilon^2)$ by hypothesis, which implies that $$\sum_{y \in \mathcal Y}{q_y^2} = \mbox{Col}(Y) - \dfrac{1}{\abs{\mathcal Y}} \le \dfrac{1}{\abs{\mathcal Y}}(1 + 4\varepsilon^2) - \dfrac{1}{\abs{\mathcal Y}} = \dfrac{4\varepsilon^2}{\abs{\mathcal Y}}$$
+	}
+
+	Lastly, by the claim we conclude that $$\mbox{SD}(Y;U)= \dfrac{1}{2} \sqrt{\rbk{\sum_{y \in \mathcal Y}{q_y^2}}\abs{\mathcal Y}} \le \dfrac{1}{2} \sqrt{\dfrac{4\varepsilon^2}{\abs{\mathcal Y}}\abs{\mathcal Y}} = \varepsilon$$
+\end{proof}
+
+\begin{framedlem}{Leftover hash lemma}
+	Given a pairwise independent function $\mathcal H = \{h_S :\{0, 1\}^n \to \{0, 1\}^\ell\}_{S \in \{0, 1\}^d}$, and a random variable $X$, for each $S \in \{0, 1\}^d$ it holds that $\mbox{Ext}(S, X) = h_S(X)$ is a $(k, \varepsilon)$-extractor for $k \ge \ell + 2 \log\rbk{\tfrac{1}{\varepsilon}} - 2$.
+\end{framedlem}
+
+\begin{proof}
+	Fix $S \in \{0, 1\}^d$ and two random variables $X, X'$; moreover, let $Y = (S, \mbox{Ext}(S, X)) = (S, h_S(X))$ and let $Y'$ be a copy of $Y$ defined as $Y' = (S', \mbox{Ext}(S', X')) = (S, h_{S'}(X'))$. Note that
+	\begin{equation*}
+		\begin{split}
+			\mbox{Col}(Y) & = \Pr[Y = Y']                                             \\
+			              & = \Pr[S = S' \land \mbox{Ext}(S, X) = \mbox{Ext}(S', X')] \\
+			              & = \Pr[S = S' \land h_S(X) = h_{S'}(X')]                   \\
+		\end{split}
+	\end{equation*}
+	Now, since $S$ and $S'$ are independent from $X$ and $X'$, we get that
+	\begin{equation*}
+		\begin{split}
+			\mbox{Col}(Y) & = \Pr[S = S' \land h_S(X) = h_{S'}(X')]                                           \\
+			              & = \Pr[S = S' \land h_S(X) = h_S(X')]                                              \\
+			              & = \Pr[S = S'] \cdot \Pr[h_S(X) = h_S(X')]                                         \\
+			              & = \dfrac{1}{\abs{\{0, 1\}^d}} \cdot \Pr[h_S(X) = h_S(X')]                         \\
+			              & = 2^{-d} \cdot (\Pr[X = X', h_S(X) = h_S(X')] + \Pr[X \neq X', h_S(X) = h_S(X')]) \\
+			              & = 2^{-d} \cdot (\Pr[X = X'] + \Pr[X \neq X', h_S(X) = h_S(X')])                   \\
+			              & \le 2^{-d} \cdot (TODO + 1^{-\ell})                                               \\
+			              & = \dfrac{1}{2^{d + \ell}}\rbk{2^{\ell - k} + 1}                                   \\
+		\end{split}
+	\end{equation*}
+	TODO \todo{come continua poi il calcolo sopra?}
+	Finally, we have that
+	\begin{equation*}
+		\begin{alignedat}{2}
+			\mbox{Col}(Y) & \le \dfrac{1}{2^{d + \ell}}\rbk{2^{\ell - k} + 1}                            &                                         \\
+			              & \le \dfrac{1}{2^{d + \ell}}\rbk{2^{2 - 2 \log \rbk{\tfrac{1}{\varepsilon}}}} & \quad (\mbox{by hypothesis})            \\
+			              & = \dfrac{4\varepsilon^2 +1}{\abs{\mathcal Y}}                                & (\mbox{through algebraic manipulation}) \\
+		\end{alignedat}
+	\end{equation*}
+	and thanks to the previous proposition we know that $\mbox{Col}(Y) \le \tfrac{1}{\abs{\mathcal Y}}(4\varepsilon^2 + 1)$ implies that $\mbox{SD}(Y;U) \le \varepsilon \iff Y \sim_\varepsilon U \iff (S, \mbox{Ext}(S, X)) \sim_\varepsilon (S, U_\ell)$ concluding that $\mbox{Ext}$ is indeed a $(k, \varepsilon)$-extractor.
+\end{proof}
+
+\section{Exercises}
+
+\begin{framedprob}{}
+	Given a prime $p \in \Primes$, let $\mathcal M = \mathcal T = \Z_p$ and $\mathcal K = \Z_p^2$. Prove that the hash family $\mathcal H = \{h_{(a, b)}\}_{(a, b) \in \Z_p^2}$, where $\congmod{h_{(a, b)}(m)}{am + b}{p}$, cannot be a 2-time statistically secure MAC.
+\end{framedprob}
+
+\solution{
+	TODO \todo{todo}
+}
+
+\begin{framedprob}{}
+	Construct a 3-wise independent hash function family and prove its correctness.
+\end{framedprob}
+
+\solution{
+	TODO \todo{todo}
+}
 
 % \printbibliography % UNCOMMENT FOR BIBLIOGRAPHY
 
