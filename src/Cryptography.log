@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.8.29)  4 OCT 2025 12:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.8.29)  5 OCT 2025 19:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1609,7 +1609,7 @@ Package hyperref Info: Link coloring ON on input line 76.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<../../packages/Nyx/logo.png, id=31, 803.0pt x 301.125pt>
+<../../packages/Nyx/logo.png, id=35, 803.0pt x 301.125pt>
 File: ../../packages/Nyx/logo.png Graphic file (type png)
 <use ../../packages/Nyx/logo.png>
 Package pdftex.def Info: ../../packages/Nyx/logo.png  used on input line 77.
@@ -1745,23 +1745,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 Package cleveref Info: loaded `english' language definitions on input line 217.
 [5]
-Overfull \hbox (4.72946pt too wide) in paragraph at lines 221--221
-[][][]\T1/cmr/m/n/6 paragrafo[]  
- []
-
-
-Overfull \hbox (4.72946pt too wide) in paragraph at lines 221--221
-[][][]\T1/cmr/m/n/6 paragrafo[]  
- []
-
-
-Overfull \hbox (3.67195pt too wide) in paragraph at lines 227--228
+Overfull \hbox (3.67195pt too wide) in paragraph at lines 242--243
 []\T1/cmr/m/n/12 In other words, this prop-erty states that even when $\OML/cmm/m/it/12 t$ \T1/cmr/m/n/12 message-tag pairs $\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 m[]; ^^\[]\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; [] ; \OT1/cmr/m/n/12 (\OML/cmm/m/it/12 m[]; ^^\[]\OT1/cmr/m/n/12 )$
  []
 
 
 
-Package cleveref Info: loaded `english' language definitions on input line 246.
+Package cleveref Info: loaded `english' language definitions on input line 249.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1769,10 +1759,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 246.
+Package cleveref Info: loaded `english' language definitions on input line 249.
 [6]
 
-Package cleveref Info: loaded `english' language definitions on input line 276.
+Package cleveref Info: loaded `english' language definitions on input line 281.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1780,10 +1770,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 276.
+Package cleveref Info: loaded `english' language definitions on input line 281.
 [7]
 
-Package cleveref Info: loaded `english' language definitions on input line 300.
+Package cleveref Info: loaded `english' language definitions on input line 297.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1791,14 +1781,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 300.
+Package cleveref Info: loaded `english' language definitions on input line 297.
 [8]
 
-LaTeX Warning: Marginpar on page 9 moved.
-
-
-
-Package cleveref Info: loaded `english' language definitions on input line 322.
+Package cleveref Info: loaded `english' language definitions on input line 316.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1806,15 +1792,30 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 322.
+Package cleveref Info: loaded `english' language definitions on input line 316.
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 340--340
+
+LaTeX Warning: Marginpar on page 10 moved.
+
+
+
+Package cleveref Info: loaded `english' language definitions on input line 338.
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+Package cleveref Info: loaded `english' language definitions on input line 338.
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 356--356
 
  []
 
 
 
-Package cleveref Info: loaded `english' language definitions on input line 340.
+Package cleveref Info: loaded `english' language definitions on input line 356.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1822,15 +1823,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 340.
-[10]
-Overfull \hbox (6.0174pt too wide) in paragraph at lines 350--351
+Package cleveref Info: loaded `english' language definitions on input line 356.
+[11]
+Overfull \hbox (6.0174pt too wide) in paragraph at lines 366--367
 []\T1/cmr/m/n/12 Fix $\OML/cmm/m/it/12 S \OMS/cmsy/m/n/12 2 f\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 1\OMS/cmsy/m/n/12 g[]$ \T1/cmr/m/n/12 and two ran-dom vari-ables $\OML/cmm/m/it/12 X; X[]$\T1/cmr/m/n/12 ; more-over, let $\OML/cmm/m/it/12 Y \OT1/cmr/m/n/12 = (\OML/cmm/m/it/12 S; []\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 S; X\OT1/cmr/m/n/12 )) =
  []
 
 
 
-Package cleveref Info: loaded `english' language definitions on input line 381.
+Package cleveref Info: loaded `english' language definitions on input line 397.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1838,10 +1839,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 381.
-[11]
+Package cleveref Info: loaded `english' language definitions on input line 397.
+[12]
 
-Package cleveref Info: loaded `english' language definitions on input line 403.
+Package cleveref Info: loaded `english' language definitions on input line 417.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1849,8 +1850,25 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-Package cleveref Info: loaded `english' language definitions on input line 403.
-[12] (./Cryptography.aux
+Package cleveref Info: loaded `english' language definitions on input line 417.
+[13]
+Chapter 2.
+
+Overfull \hbox (11.86653pt too wide) in paragraph at lines 419--419
+[][][]\T1/cmr/m/n/6 impagliazzo[]  
+ []
+
+
+Overfull \hbox (11.86653pt too wide) in paragraph at lines 419--419
+[][][]\T1/cmr/m/n/6 impagliazzo[]  
+ []
+
+
+
+Package cleveref Info: loaded `english' language definitions on input line 423.
+[14
+
+] (./Cryptography.aux
 Package cleveref Info: loaded `english' language definitions on input line 12.
 )
  ***********
@@ -1862,24 +1880,24 @@ L3 programming layer <2025-01-18>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `Cryptography.out' has not changed.
-(rerunfilecheck)             Checksum: 97EC646E3B6EF1B74A6BFEB0C9D10FC1;819.
+(rerunfilecheck)             Checksum: 158E81094F084CB93895783027C34B5E;882.
 Package logreq Info: Writing requests to 'Cryptography.run.xml'.
 \openout1 = `Cryptography.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 76089 strings out of 475119
- 1857501 string characters out of 5765716
- 3083468 words of memory out of 5000000
- 98049 multiletter control sequences out of 15000+600000
+ 76068 strings out of 475119
+ 1856947 string characters out of 5765716
+ 3079039 words of memory out of 5000000
+ 98026 multiletter control sequences out of 15000+600000
  585855 words of font info for 95 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  119i,17n,123p,1901b,2247s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1440.pfb></usr/share/texmf-dist/fonts/type1/public/stmaryrd/stmary10.pfb>
-Output written on Cryptography.pdf (14 pages, 442841 bytes).
+Output written on Cryptography.pdf (16 pages, 448129 bytes).
 PDF statistics:
- 310 PDF objects out of 1000 (max. 8388607)
- 235 compressed objects within 3 object streams
- 62 named destinations out of 1000 (max. 500000)
- 72 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 323 PDF objects out of 1000 (max. 8388607)
+ 246 compressed objects within 3 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 80 words of extra memory for PDF output out of 10000 (max. 10000000)
 

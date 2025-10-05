@@ -218,7 +218,22 @@ First, let's start with a simple model, that ignores secrecy and only cares abou
 
 TODO \todo{disegno}
 
-TODO \todo{paragrafo}
+The idea behind tagging functions is the following:
+
+\begin{itemize}
+	\item Alice send the message-tag pair to Bob
+	\item Bob re-computes the tag --- assuming that we do not care about secrecy, hence the key can be shared --- through the same key
+	\item if the two tags are equal, Bob can be usre that the message has not been altered
+\end{itemize}
+
+However, this simple idea only works under the assumption of \tbf{unforgeability}, which says that
+
+\begin{enumerate}
+	\item it should be \tit{hard} to forge a valid tag $\tau$ for a message $m$ when the key $K$ is not known
+	\item it should be \tit{hard} to forge a valid tag $\tau$ for a message $m$ even when a pair $(m', \tau')$ is known
+\end{enumerate}
+
+In other words, the first condition requires that the tag should not reveal any information about the key that forged it, and the second condition states that no message-tag pair should reveal any information about how the tags are computed. Without this property, an adversary may be able to infer information about the key and/or the tagging function, using them to forge valid tags, which may allow them to fool the receiver. We can formalize unforgeability with the following concept.
 
 \begin{frameddefn}{$t$-time $\varepsilon$-statistical security}
 	A MAC $\Pi = (\mbox{Tag})$ is said to have \tbf{$t$-time $\varepsilon$-statistical security} if $\forall m, m_1, \ldots, m_t \in \mathcal M$ pairwise distinct, and $\forall \tau, \tau_1, \ldots, \tau_t \in \mathcal T$ it holds that $$\Pr_{K \in_R \mathcal K}[\mbox{Tag}(K, m) = \tau \mid \mbox{Tag}(K, m_1) = \tau_1, \ldots, \mbox{Tag}(K, m_t) = \tau_t] \le \varepsilon$$
@@ -229,7 +244,7 @@ In other words, this property states that even when $t$ message-tag pairs $(m_1,
 Furthermore, as we proved for perfect secrecy, we are going to show that the notion of \curlyquotes{good} statistical security is achievable, even though it's highly inefficient in terms of key size.
 
 \begin{framedthm}{}
-	Any $t$-time $2^{-\lambda}$-statistically secure MAC must have a key of size $(t + 1) \cdot \lambda$
+	Any $t$-time $2^{-\lambda}$-statistically secure MAC must have a key of size $(t + 1) \cdot \lambda$.
 \end{framedthm}
 
 A good enough 1-time statisticalllhy secure MAC can be achieved through \tbf{pairwise independent hash functions}, a family of hash functions where each pair of functions forms a pari of independent random variables.
@@ -245,6 +260,7 @@ Note that, in this definition, $h_K(m)$ and $h_K(m')$ are two random variables \
 \end{framedthm}
 
 \begin{proof}
+	% Fix $m \in \mathcal M$ and $\tau \in \mathcal T$, and let $\Pi = (\mbox{Tag})$ be the MAC defined as $\mbox{Tag}(K, m) = h_K(m)$
 	TODO \todo{todo}
 \end{proof}
 
@@ -262,29 +278,29 @@ Let's first address the problem of \tit{extracting} randomness from an unpredict
 	\item if $b_1 \neq b_2$, $Y = 1$ if and only if $b_1 = 0$ and $b_2 = 1$
 \end{itemize}
 
-First, we observe that this process can go on indefinitely, never halting on any value for $Y$. But assuming the procedure does halt, we have that $$\Pr[Y = 0] = \Pr[b_1 = 1 \land b_2 = 0] = \Pr[b_1 = 1] \cdot \Pr[b_2 = 0] = (1 - p)p$$ $$\Pr[Y = 1] = \Pr[b_1 = 0 \land b_2 = 1] = \Pr[b_1 = 0] \cdot \Pr[b_2 = 1] = p(1 - p)$$ Moreover, we see that the probability of $Y = \ ?$ happening for $m$ consecutive tries is at most $$\Pr[Y = \ ? \mbox{for $m$ tries}] = (\Pr[Y = \ ?])^m = (1 - \Pr[Y = 0 \lor Y = 1])^m \le (1 - 2p(1 - p))^m$$ and as $m$ goes to infinity, the latter probabijlity goes to 0, which implies that $\Pr[Y = 0]$ and $\Pr[Y = 1]$ will tend towards $\tfrac{1}{2}$ due to them having the same probability and them being the only two possible outcomes. Thus, we have achieved a fair coin $Y$.
+First, we observe that this process can go on indefinitely, never halting on any value for $Y$. But assuming the procedure does halt, we have that $$\Pr[Y = 0] = \Pr[b_1 = 1 \land b_2 = 0] = \Pr[b_1 = 1] \cdot \Pr[b_2 = 0] = (1 - p)p$$ $$\Pr[Y = 1] = \Pr[b_1 = 0 \land b_2 = 1] = \Pr[b_1 = 0] \cdot \Pr[b_2 = 1] = p(1 - p)$$ Moreover, we see that the probability of $Y = \ ?$ happening for $m$ consecutive tries is at most $$\Pr[Y = \ ? \mbox{for $m$ tries}] = (\Pr[Y = \ ?])^m = (1 - \Pr[Y = 0 \lor Y = 1])^m \le (1 - 2p(1 - p))^m$$ and as $m$ goes to infinity, the latter probabijlity goes to 0, which implies that $\Pr[Y = 0]$ and $\Pr[Y = 1]$ will tend towards $\tfrac{1}{2}$ due to them having the same probability and them being the only two possible outcomes. Thus, we have achieved a fair enough coin $Y$.
 
-TODO \todo{par}
+Can we generalize this concept? That is, is it possible to design an extractor Ext that uses a random variable $X$ to output any desired uniform distribution $\mbox{Ext}(X)$? Well, if the source $X$ is unpredictable this is clearly not possible, not matter how effort --- if the source is truly unpredictable, we would only be able to achieve an unpredictable extractor in any case. We can measure how \curlyquotes{good} oure source is based on the following concept.
 
 \begin{frameddefn}{Min-entropy}
 	Given a random variable $X$, the \tbf{min-entropy} of $X$ is defined as follows: $$H_{\mathrm{min}}(X) := - \log{\max_x{\Pr[X = x]}}$$
 \end{frameddefn}
 
-TODO \todo{todo}
+We observe that min-entropy represents the largest value $m$ such that each observation of $X$ provides \tit{as least} $m$ bits of information. But why is it called \curlyquotes{min-entropy}? The standard definition of entropy is the following $$H(P) := \sum_i{p_i \log \rbk{\dfrac{1}{p_i}}}$$ and in the min-entropy, instead, we are taking the minimum value of $\log \rbk{\tfrac{1}{p_i}}$, in fact $$\min_i{\log \rbk{\tfrac{1}{p_i}}} = \log \rbk{\min_i{\tfrac{1}{p_i}}} = - \log \max_i p_i$$
+
+How does the min-entropy assign values? Consider a random variable $X \sim U_n$, where $U_n$ denotes the uniform distribution over $\{0, 1\}^n$. Clearly, for any $x$ it holds that $\Pr[X = x] = 2^{-n}$, therefore we get that the min-entropy of $X$ is $$H_\mathrm{min}(X) = - \log \max_x{\Pr[X = x]} = -\log(2^{-n}) = n$$ This result intuitively makes sense, since we assumed $X$ to be a uniform source, which implies that each observation of $X$ provides at least $n$ bits of information. Instead, if we consider a constant random variable $Y$, i.e. such that $\Pr[Y = \bar x] = 1$ for some value $\bar x$ and $\Pr[Y \neq \bar x] = 0$, we get that $$H_\mathrm{min}(Y) = - \log \max_x{\Pr[Y = x]} = - \log 1 = 0$$ which intuitively makes sense too, since $Y$ was assumed to be constant, and indeed each observation of $Y$ provides at least 0 bits of information.
 
 Is there an extractor Ext that for any random variable $X$ it outputs a uniform distribution $Y = \mbox{Ext}(X)$ such that $H_\mathrm{min}(X) \ge k$ for some $k > 0$? Even under this constraint, the answer is still negative, in fact it is impossible to define such extractor even if we restrict the question to extracting only \tit{one bit} --- i.e. $\mbox{Ext}(X) = b \in \{0, 1\}$ --- and $k = n - 1$.
 
 \begin{framedprop}{}
-	Let $X$ be a uniform random variable defined over $\{0, 1\}^n$; there is no extractor Ext such that $\mbox{Ext}(X) \in \{0, 1\}$ is uniform.
+	There is no extractor Ext such that for every random variable $X$ over $\{0, 1\}^n$ with $H_\mathrm{min}(X) \ge n - 1$ it holds that $\mbox{Ext}(X)$ is uniform over $\{0, 1\}$.
 \end{framedprop}
 
 \begin{proof}
 	Let $\func{\mbox{Ext}}{\{0, 1\}^n}{\{0, 1\}}$ be any extractor, and let $b \in \{0, 1\}$ be the output minimizing the cardinality of the preimage of the extractor, i.e. the set of inputs for which the extractor output $b$ $$b = \argmin_{b' \in \{0, 1\}}{\abs{\mbox{Ext}^{-1}(b)}}$$ By the pigeonhole principle, we have that $$\abs{\mbox{Ext}^{-1}(b)} \le \dfrac{\abs{\{0, 1\}^n}}{2} = \dfrac{2^n}{2} = 2^{n - 1}$$ Let $X$ be a random variable uniform over $\mbox{Ext}^{-1}(b)$; since $X$ is uniform, we have that $H_\mathrm{min}(X) \ge n- 1$, however $\mbox{Ext}(X)$ cannot be uniform since the output is constant (in fact $\mbox{Ext}(X) \equiv b$).
+
+	This proves that any extractor Ext has always a bad input uniform random variable $X$ that returns a non-uniform distribution $\mbox{Ext}(X)$, concluding that there is no extractor such that for all $X$ it holds that $\mbox{Ext}(X)$ is uniform.
 \end{proof}
-
-% This proves that any extractor Ext for $X$ has always a bad input uniform random variable $X$
-
-TODO \todo{la roba del par prima va capita}
 
 Hence, since we cannot define an extractor that yields a uniform distribution, the best we can achieve is a distribution that is \tit{close enough} to a uniform one. But what does it mean to be \curlyquotes{close enough} mathematically? First, let us provide the definition of \tbf{statistical distance}.
 
@@ -397,6 +413,10 @@ Before proving the leftover hash lemma, consider the following property.
 \solution{
 	TODO \todo{todo}
 }
+
+\chapter{TODO}
+
+TODO \todo{impagliazzo}
 
 % \printbibliography % UNCOMMENT FOR BIBLIOGRAPHY
 
